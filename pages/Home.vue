@@ -12,6 +12,9 @@
         :class="hero.className"
       />
     </SfHero>
+
+    <render-content :content="body" />
+
     <LazyHydrate when-visible>
       <SfBannerGrid :banner-grid="1" class="banner-grid">
         <template v-for="item in banners" #[item.slot]>
@@ -68,12 +71,14 @@ import {
   productGetters
 } from '@vue-storefront/shopify';
 import {
-  computed
+  computed,
 } from '@nuxtjs/composition-api';
 import { onSSR } from '@vue-storefront/core';
 import LazyHydrate from 'vue-lazy-hydration';
 import MobileStoreBanner from '~/components/MobileStoreBanner.vue';
 import RelatedProducts from '~/components/RelatedProducts.vue';
+import { useContent } from '@vue-storefront/storyblok'
+import RenderContent from '~/cms/RenderContent.vue'
 
 export default {
   name: 'Home',
@@ -90,7 +95,8 @@ export default {
     SfArrow,
     SfButton,
     MobileStoreBanner,
-    LazyHydrate
+    LazyHydrate,
+    RenderContent
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   setup() {
@@ -100,10 +106,14 @@ export default {
       loading: productsLoading
     } = useProduct('relatedProducts');
     const { cart, load: loadCart, addItem: addToCart, isInCart } = useCart();
+    const { search, content } = useContent('home')
+
+    const body = computed(() => content.value.body)
 
     onSSR(async () => {
       await productsSearch({ limit: 8 });
       await loadCart();
+      await search({ url: `home?cv=${Math.floor(Date.now()/1000)}` })
     });
     return {
       products: computed(() =>
@@ -113,7 +123,8 @@ export default {
       productsLoading,
       productGetters,
       addToCart,
-      isInCart
+      isInCart,
+      body
     };
   },
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

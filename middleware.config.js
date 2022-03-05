@@ -10,6 +10,13 @@ module.exports = {
         currency: 'USD',
         country: 'US'
       }
+    },
+    sb: {
+      location: '@vue-storefront/storyblok/server',
+      configuration: {
+        token: process.env.STORYBLOK_TOKEN,
+        cacheProvider: 'memory',
+      },
     }
   }
 };

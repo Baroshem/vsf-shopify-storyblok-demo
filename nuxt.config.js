@@ -64,7 +64,8 @@ const config = {
   },
   loading: { color: '#fff' },
   plugins: [
-    '~/plugins/scrollToTop.client.js'
+    '~/plugins/scrollToTop.client.js',
+    '~/plugins/cms'
   ],
   buildModules: [
     // to core
@@ -77,8 +78,8 @@ const config = {
       '@vue-storefront/nuxt',
       {
         useRawSource: {
-          dev: ['@vue-storefront/shopify', '@vue-storefront/core'],
-          prod: ['@vue-storefront/shopify', '@vue-storefront/core']
+          dev: ['@vue-storefront/shopify', '@vue-storefront/core', '@vue-storefront/storyblok'],
+          prod: ['@vue-storefront/shopify', '@vue-storefront/core', '@vue-storefront/storyblok']
         }
       }
     ],
@@ -93,6 +94,7 @@ const config = {
     ]
   ],
   modules: [
+    '@vue-storefront/storyblok/nuxt',
     'nuxt-i18n',
     'cookie-universal-nuxt',
     'vue-scrollto/nuxt',
